@@ -1,0 +1,22 @@
+version: '3.0'
+
+services:
+  web:
+    restart: always
+    build: .
+    ports:
+      - "80"
+    volumes:
+      - web-volume:/usr/src/app/static
+    environment:
+      VIRTUAL_HOST: indiekit.com,auth.indiekit.com
+      LETSENCRYPT_HOST: indiekit.com,auth.indiekit.com
+      LETSENCRYPT_EMAIL: hello@indiekit.com
+    command: /usr/local/bin/gunicorn -w 1 -b :80 ethtx-server:app
+volumes:
+  web-volume:
+
+networks:
+  default:
+    external:
+      name: webproxy
